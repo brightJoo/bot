@@ -7,7 +7,7 @@ COPY src src
 RUN mvn -B package -DskipTests
 
 # 2) Runtime stage (slim)
-FROM eclipse-temurin:21-jre
+FROM openjdk:21-jdk-slim-bullseye
 WORKDIR /app
 COPY --from=build /workspace/target/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app/app.jar"]
