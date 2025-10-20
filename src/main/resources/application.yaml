@@ -1,0 +1,53 @@
+# com.binance.bot/src/main/resources/application.yaml
+
+spring:
+  # ------------------------------------
+  # 1. H2 Database ??
+  # ------------------------------------
+  datasource:
+    url: jdbc:h2:mem:binance_bot_db;DB_CLOSE_DELAY=-1 # ???? H2 ??, ?????? ?? ??? ??
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  
+  # ------------------------------------
+  # 2. JPA ??
+  # ------------------------------------
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update # ?? ????? update? ???? Entity ???? ??? ?? ??/??
+    show-sql: true # ??? SQL ?? ??
+    properties:
+      hibernate:
+        format_sql: true # SQL ???
+  
+  # ------------------------------------
+  # 3. Spring Batch ??
+  # ------------------------------------
+  batch:
+    job:
+      enabled: true
+    jdbc:
+      initialize-schema: always # H2 DB? Batch ?? ??? ?? ??
+
+# ------------------------------------
+# 4. Lambda API ? ?? ??
+# ------------------------------------
+lambda:
+  api:
+    base-url: https://lambda.endpoint.com/prod # ?? API Gateway URL? ???? ?
+
+trade:
+  usdt-amount: 10.0 # 1? ??? ??? USDT ??? (??: 10 USDT)
+  execution-delay-minutes: 60 # ?? ?? ?? ? ?? ????? ?? ?? (60?)
+
+# ------------------------------------
+# 5. ?? ??
+# ------------------------------------
+logging:
+  level:
+    # Feign Client ?? ?? ?? ?? (???? ??)
+    com.binance.bot.client.BinanceLambdaClient: DEBUG
+    # SQL ?? ??
+    org.hibernate.SQL: debug

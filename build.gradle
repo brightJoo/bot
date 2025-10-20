@@ -1,29 +1,54 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.6'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'com.binance'
+group = 'com.binance.bot'
 version = '0.0.1-SNAPSHOT'
-description = 'Demo project for Spring Boot'
+
+// Spring Cloud 의존성 관
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.1"
+    }
+}
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21) // Spring Boot 3.x은 Java 17 이상 권장
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
+    // Spring Boot Core
+    implementation 'org.springframework.boot:spring-boot-starter'
 
-tasks.named('test') {
-	useJUnitPlatform()
+    // Spring Batch (필수)
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+
+    // Feign Client (API 호출)
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    // H2 Database (내장 DB)
+    runtimeOnly 'com.h2database:h2'
+
+    // Lombok (선택적: DTO 및 Entity 코드 단순화)
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.batch:spring-batch-test'
+
+    // Spring Data JPA (JPA 필수)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Configuration Processor (application.yaml의 커스텀 프로퍼티 사용 시 IDE 지원)
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+
 }
